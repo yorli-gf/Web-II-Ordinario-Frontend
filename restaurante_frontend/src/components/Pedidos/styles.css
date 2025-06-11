@@ -1,0 +1,92 @@
+.pedidos-container {
+  max-width: 900px;
+  margin: 20px auto;
+  padding: 20px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.error {
+  color: #d32f2f;
+  background: #ffebee;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+}
+
+button {
+  padding: 8px 16px;
+  background: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 5px;
+}
+
+button:disabled {
+  background: #cccccc;
+  cursor: not-allowed;
+}
+
+.btn-eliminar {
+  background: #f44336;
+}
+
+.btn-eliminar:hover {
+  background: #d32f2f;
+}
+
+.seleccion-pedido {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.seleccion-pedido select {
+  flex-grow: 1;
+  padding: 8px;
+}
+
+.detalle-pedido {
+  margin-top: 30px;
+}
+
+.cabecera-detalles {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.agregar-producto {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.agregar-producto select {
+  flex-grow: 1;
+}
+
+.agregar-producto input {
+  width: 70px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+th, td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background-color: #f2f2f2;
+}
