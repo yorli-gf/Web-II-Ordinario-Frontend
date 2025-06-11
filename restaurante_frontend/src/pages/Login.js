@@ -30,7 +30,7 @@ function Login() {
     <div className="login-container">
       <div className="login-card">
         <div className="login-header">
-          <h2>Bienvenido al Sistema</h2>
+          <h2>Bienvenido al Sistema de Administración de Pedidos</h2>
           <p>Ingresa tus credenciales para continuar</p>
         </div>
 

@@ -1,0 +1,115 @@
+/* Estilos base */
+.home-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  padding: 20px;
+  font-family: 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Tarjeta principal */
+.home-card {
+  width: 100%;
+  max-width: 800px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Cabecera - Mismo gradiente que el Login */
+.home-header {
+  padding: 30px;
+  text-align: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.home-header h2 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.home-header p {
+  margin: 8px 0 0;
+  opacity: 0.9;
+  font-size: 16px;
+  font-weight: 300;
+}
+
+/* Opciones del menú */
+.menu-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 25px;
+  padding: 30px;
+}
+
+.menu-card {
+  display: block;
+  padding: 25px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.1);
+  text-decoration: none;
+  color: #333;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(102, 126, 234, 0.2);
+  text-align: center;
+}
+
+.menu-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(102, 126, 234, 0.2);
+  border-color: #667eea;
+}
+
+.menu-icon {
+  font-size: 48px;
+  margin-bottom: 15px;
+  color: #667eea;
+}
+
+.menu-card h3 {
+  margin: 0 0 10px;
+  font-size: 20px;
+  color: #2d3748;
+}
+
+.menu-card p {
+  margin: 0;
+  font-size: 14px;
+  color: #718096;
+}
+
+/* Efecto activo al hacer clic */
+.menu-card:active {
+  transform: translateY(0);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .menu-options {
+    grid-template-columns: 1fr;
+  }
+  
+  .home-card {
+    border-radius: 0;
+    box-shadow: none;
+  }
+  
+  .home-container {
+    padding: 0;
+    background: white;
+  }
+}
