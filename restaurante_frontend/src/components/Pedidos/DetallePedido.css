@@ -1,0 +1,211 @@
+.detalle-pedido {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 25px;
+  margin-top: 20px;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Cabecera del pedido */
+.cabecera-detalles {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.cabecera-detalles h3 {
+  margin: 0;
+  color: #2d3748;
+  font-size: 1.5rem;
+}
+
+/* Selector estado pedido */
+.cabecera-detalles select {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  font-size: 1rem;
+  background: white;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.cabecera-detalles select:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* Formulario para agregar producto */
+.agregar-producto {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.agregar-producto select,
+.agregar-producto input[type="number"] {
+  padding: 12px 15px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: all 0.3s;
+}
+
+.agregar-producto select {
+  flex: 2;
+  min-width: 200px;
+}
+
+.agregar-producto select:focus,
+.agregar-producto input[type="number"]:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.agregar-producto input[type="number"] {
+  flex: 1;
+  max-width: 80px;
+  text-align: center;
+}
+
+.agregar-producto button {
+  flex: 1;
+  max-width: 120px;
+  padding: 12px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.agregar-producto button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+}
+
+/* Tabla de detalles */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead tr {
+  border-bottom: 1px solid #eee;
+  font-weight: 600;
+  color: #718096;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+thead th,
+tbody td {
+  padding: 12px 15px;
+  text-align: left;
+}
+
+tbody tr {
+  border-bottom: 1px solid #f7fafc;
+}
+
+tbody tr:last-child {
+  border-bottom: none;
+}
+
+/* Botón eliminar */
+.btn-eliminar {
+  padding: 8px 12px;
+  background: #fff5f5;
+  color: #e53e3e;
+  border: 1px solid #fed7d7;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-eliminar:hover {
+  background: #e53e3e;
+  color: white;
+}
+
+/* Total del pedido */
+.total-pedido {
+  display: flex;
+  justify-content: flex-end;
+  padding: 20px 0;
+  margin-top: 15px;
+  border-top: 2px solid #eee;
+  font-weight: 600;
+  color: #2d3748;
+  font-size: 1.1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .agregar-producto {
+    flex-direction: column;
+  }
+
+  .agregar-producto select,
+  .agregar-producto input[type="number"],
+  .agregar-producto button {
+    width: 100%;
+    max-width: none;
+  }
+
+  table, thead, tbody, tr, th, td {
+    display: block;
+  }
+
+  thead tr {
+    display: none;
+  }
+
+  tbody tr {
+    margin-bottom: 20px;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 15px;
+  }
+
+  tbody td {
+    padding: 10px 0;
+    text-align: right;
+    position: relative;
+    padding-left: 50%;
+  }
+
+  tbody td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 15px;
+    width: 45%;
+    padding-left: 15px;
+    font-weight: 600;
+    text-align: left;
+    color: #718096;
+  }
+
+  .btn-eliminar {
+    position: static;
+    display: block;
+    margin-top: 10px;
+    width: 100%;
+    text-align: center;
+  }
+}

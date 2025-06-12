@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import API from "../../api/axiosConfig";
+import "./DetallePedido.css";
 
 function DetallePedido({ pedido, productos, onUpdate }) {
   const [detalles, setDetalles] = useState([]);

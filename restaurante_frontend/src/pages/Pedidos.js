@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import API from "../api/axiosConfig";
+import "./Pedidos.css";
 
 function Pedidos() {
   const [productos, setProductos] = useState([]);
@@ -8,186 +9,220 @@ function Pedidos() {
   const [detallesPedido, setDetallesPedido] = useState([]);
   const [productoId, setProductoId] = useState("");
   const [cantidad, setCantidad] = useState(1);
-  const [loadingDetalles, setLoadingDetalles] = useState(false);
+  const [loading, setLoading] = useState({
+    detalles: false,
+    general: false
+  });
 
-  // Obtener productos
-  const getProductos = async () => {
-    try {
-      const res = await API.get("/productos/");
-      setProductos(res.data);
-    } catch (error) {
-      console.error("Error al obtener productos", error);
-    }
-  };
-
-  // Obtener pedidos
-  const getPedidos = async () => {
-    try {
-      const res = await API.get("/pedidos/");
-      setPedidos(res.data);
-    } catch (error) {
-      console.error("Error al obtener pedidos", error);
-    }
-  };
+  // Obtener datos iniciales
+  useEffect(() => {
+    const cargarDatos = async () => {
+      setLoading(prev => ({...prev, general: true}));
+      try {
+        const [resProductos, resPedidos] = await Promise.all([
+          API.get("/productos/"),
+          API.get("/pedidos/")
+        ]);
+        setProductos(resProductos.data);
+        setPedidos(resPedidos.data);
+      } catch (error) {
+        console.error("Error cargando datos:", error);
+      } finally {
+        setLoading(prev => ({...prev, general: false}));
+      }
+    };
+    cargarDatos();
+  }, []);
 
   // Crear nuevo pedido
   const crearPedido = async () => {
     try {
       const res = await API.post("/pedidos/", { estado: "pendiente" });
-      setPedidos((prev) => [...prev, res.data]);
+      setPedidos(prev => [...prev, res.data]);
       setPedidoSeleccionado(res.data);
       setDetallesPedido([]);
-      setProductoId("");
-      setCantidad(1);
     } catch (error) {
-      console.error("Error al crear pedido", error);
+      console.error("Error al crear pedido:", error);
     }
   };
 
-  // Obtener detalles del pedido seleccionado
+  // Obtener detalles del pedido
   const getDetalles = async (pedidoId) => {
+    setLoading(prev => ({...prev, detalles: true}));
     try {
-      setLoadingDetalles(true);
       const res = await API.get(`/detalles/?pedido=${pedidoId}`);
       setDetallesPedido(res.data);
     } catch (error) {
-      console.error("Error al obtener detalles", error);
+      console.error("Error al obtener detalles:", error);
     } finally {
-      setLoadingDetalles(false);
+      setLoading(prev => ({...prev, detalles: false}));
     }
   };
 
-  // Agregar detalle (producto) al pedido
-  const agregarDetalle = async () => {
-    if (!pedidoSeleccionado) {
-      alert("Selecciona un pedido primero.");
-      return;
-    }
-    if (!productoId) {
-      alert("Selecciona un producto.");
-      return;
-    }
-    if (cantidad < 1) {
-      alert("Cantidad debe ser al menos 1.");
-      return;
-    }
+  // Agregar producto al pedido
+  const agregarProducto = async () => {
+    if (!pedidoSeleccionado || !productoId || cantidad < 1) return;
+    
     try {
       await API.post("/detalles/", {
         pedido: pedidoSeleccionado.id,
         producto: productoId,
-        cantidad: cantidad,
+        cantidad: cantidad
       });
-      alert("Producto agregado al pedido.");
+      await getDetalles(pedidoSeleccionado.id);
       setProductoId("");
       setCantidad(1);
-      getDetalles(pedidoSeleccionado.id); // refrescar detalles
     } catch (error) {
-      console.error("Error al agregar detalle", error);
+      console.error("Error al agregar producto:", error);
     }
   };
 
-  // Cuando se selecciona un pedido, carga sus detalles
-  const handlePedidoChange = (e) => {
-    const id = e.target.value;
-    const pedido = pedidos.find((p) => p.id === Number(id));
-    setPedidoSeleccionado(pedido || null);
-    if (pedido) {
-      getDetalles(pedido.id);
-    } else {
-      setDetallesPedido([]);
+  // Eliminar producto del pedido
+  const eliminarProducto = async (detalleId) => {
+    if (!window.confirm("¿Eliminar este producto del pedido?")) return;
+    try {
+      await API.delete(`/detalles/${detalleId}/`);
+      await getDetalles(pedidoSeleccionado.id);
+    } catch (error) {
+      console.error("Error al eliminar producto:", error);
     }
   };
 
-  // Carga inicial
-  useEffect(() => {
-    getProductos();
-    getPedidos();
-  }, []);
+  // Cambiar estado del pedido
+  const cambiarEstado = async (nuevoEstado) => {
+    try {
+      await API.patch(`/pedidos/${pedidoSeleccionado.id}/`, { estado: nuevoEstado });
+      setPedidos(pedidos.map(p => 
+        p.id === pedidoSeleccionado.id ? {...p, estado: nuevoEstado} : p
+      ));
+    } catch (error) {
+      console.error("Error al cambiar estado:", error);
+    }
+  };
 
   return (
-    <div style={{ maxWidth: 600, margin: "auto", padding: 20, fontFamily: "Arial" }}>
-      <h2>Pedidos</h2>
-      <button onClick={crearPedido} style={{ padding: "10px 20px", marginBottom: 20 }}>
-        Nuevo Pedido
-      </button>
+    <div className="pedidos-container">
+      <div className="pedidos-card">
+        <div className="pedidos-header">
+          <h2>Gestión de Pedidos</h2>
+          <p>Administra los pedidos del restaurante</p>
+        </div>
 
-      <div style={{ marginBottom: 20 }}>
-        <label>
-          Seleccionar pedido:
-          <select
-            value={pedidoSeleccionado ? pedidoSeleccionado.id : ""}
-            onChange={handlePedidoChange}
-            style={{ marginLeft: 10, padding: 5 }}
+        <div className="pedidos-actions">
+          <button 
+            onClick={crearPedido} 
+            className="btn-primary"
+            disabled={loading.general}
           >
-            <option value="">-- Ninguno --</option>
-            {pedidos.map((p) => (
-              <option key={p.id} value={p.id}>
-                #{p.id} - Estado: {p.estado}
-              </option>
-            ))}
-          </select>
-        </label>
-      </div>
+            {loading.general ? "Cargando..." : "Nuevo Pedido"}
+          </button>
 
-      {pedidoSeleccionado && (
-        <>
-          <h3>Agregar productos al pedido #{pedidoSeleccionado.id}</h3>
-          <div style={{ display: "flex", gap: 10, alignItems: "center", marginBottom: 20 }}>
+          <div className="pedido-selector">
             <select
-              onChange={(e) => setProductoId(e.target.value)}
-              value={productoId}
-              style={{ flexGrow: 1, padding: 5 }}
+              value={pedidoSeleccionado?.id || ""}
+              onChange={(e) => {
+                const pedido = pedidos.find(p => p.id === Number(e.target.value));
+                setPedidoSeleccionado(pedido || null);
+                if (pedido) getDetalles(pedido.id);
+              }}
+              disabled={loading.general}
             >
-              <option value="">Seleccione producto</option>
-              {productos.map((p) => (
+              <option value="">-- Selecciona un pedido --</option>
+              {pedidos.map((p) => (
                 <option key={p.id} value={p.id}>
-                  {p.nombre}
+                  Pedido #{p.id} - {p.estado}
                 </option>
               ))}
             </select>
-            <input
-              type="number"
-              min={1}
-              value={cantidad}
-              onChange={(e) => setCantidad(Number(e.target.value))}
-              style={{ width: 70, padding: 5 }}
-            />
-            <button onClick={agregarDetalle} style={{ padding: "8px 16px" }}>
-              Agregar
-            </button>
           </div>
+        </div>
 
-          <h3>Detalles del pedido</h3>
-          {loadingDetalles ? (
-            <p>Cargando detalles...</p>
-          ) : detallesPedido.length === 0 ? (
-            <p>No hay productos agregados aún.</p>
-          ) : (
-            <table
-              style={{
-                width: "100%",
-                borderCollapse: "collapse",
-                textAlign: "left",
-              }}
-            >
-              <thead>
-                <tr>
-                  <th style={{ borderBottom: "1px solid #ccc", padding: "8px" }}>Producto</th>
-                  <th style={{ borderBottom: "1px solid #ccc", padding: "8px" }}>Cantidad</th>
-                </tr>
-              </thead>
-              <tbody>
-                {detallesPedido.map((d) => (
-                  <tr key={d.id}>
-                    <td style={{ borderBottom: "1px solid #eee", padding: "8px" }}>{d.producto.nombre}</td>
-                    <td style={{ borderBottom: "1px solid #eee", padding: "8px" }}>{d.cantidad}</td>
-                  </tr>
+        {pedidoSeleccionado && (
+          <div className="pedido-detalles">
+            <div className="detalles-header">
+              <h3>Pedido #{pedidoSeleccionado.id}</h3>
+              <select
+                value={pedidoSeleccionado.estado}
+                onChange={(e) => cambiarEstado(e.target.value)}
+                disabled={loading.detalles}
+              >
+                <option value="pendiente">Pendiente</option>
+                <option value="preparando">Preparando</option>
+                <option value="entregado">Entregado</option>
+                <option value="cancelado">Cancelado</option>
+              </select>
+            </div>
+
+            <div className="agregar-producto">
+              <select
+                value={productoId}
+                onChange={(e) => setProductoId(e.target.value)}
+                disabled={loading.detalles}
+              >
+                <option value="">Selecciona un producto</option>
+                {productos.map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.nombre} - ${p.precio}
+                  </option>
                 ))}
-              </tbody>
-            </table>
-          )}
-        </>
-      )}
+              </select>
+              <input
+                type="number"
+                min="1"
+                value={cantidad}
+                onChange={(e) => setCantidad(Number(e.target.value))}
+                disabled={loading.detalles}
+              />
+              <button
+                onClick={agregarProducto}
+                className="btn-secondary"
+                disabled={loading.detalles || !productoId}
+              >
+                Agregar
+              </button>
+            </div>
+
+            <div className="productos-list">
+              <h4>Productos en el pedido</h4>
+              {loading.detalles ? (
+                <p>Cargando productos...</p>
+              ) : detallesPedido.length === 0 ? (
+                <p>No hay productos agregados</p>
+              ) : (
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Producto</th>
+                      <th>Cantidad</th>
+                      <th>Precio Unitario</th>
+                      <th>Subtotal</th>
+                      <th>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {detallesPedido.map((d) => (
+                      <tr key={d.id}>
+                        <td>{d.producto.nombre}</td>
+                        <td>{d.cantidad}</td>
+                        <td>${d.producto.precio}</td>
+                        <td>${(d.cantidad * d.producto.precio).toFixed(2)}</td>
+                        <td>
+                          <button
+                            onClick={() => eliminarProducto(d.id)}
+                            className="btn-danger"
+                          >
+                            Eliminar
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

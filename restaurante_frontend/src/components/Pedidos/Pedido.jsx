@@ -1,6 +1,6 @@
 import API from "../../api/axiosConfig";
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import DetallePedido from "./DetallePedido";
 import "./styles.css";
 
@@ -79,38 +79,46 @@ function Pedidos() {
 
   return (
     <div className="pedidos-container">
-      <h2>Administración de Pedidos</h2>
+      <div className="header-with-back">
+        <Link to="/home" className="back-button">
+          &larr; Volver al Inicio
+        </Link>
+        <h2>Administración de Pedidos</h2>
+      </div>
+
       {error && <p className="error">{error}</p>}
 
-      <button onClick={crearPedido} disabled={loading}>
-        {loading ? "Cargando..." : "Nuevo Pedido"}
-      </button>
+      <div className="pedidos-actions">
+        <button onClick={crearPedido} disabled={loading} className="btn-primary">
+          {loading ? "Cargando..." : "Nuevo Pedido"}
+        </button>
 
-      <div className="seleccion-pedido">
-        <select
-          value={pedidoSeleccionado?.id || ""}
-          onChange={(e) => {
-            const pedido = pedidos.find((p) => p.id === Number(e.target.value));
-            setPedidoSeleccionado(pedido || null);
-          }}
-          disabled={loading}
-        >
-          <option value="">-- Selecciona un pedido --</option>
-          {pedidos.map((p) => (
-            <option key={p.id} value={p.id}>
-              Pedido #{p.id} - {p.estado}
-            </option>
-          ))}
-        </select>
-        {pedidoSeleccionado && (
-          <button
-            onClick={() => eliminarPedido(pedidoSeleccionado.id)}
-            className="btn-eliminar"
+        <div className="seleccion-pedido">
+          <select
+            value={pedidoSeleccionado?.id || ""}
+            onChange={(e) => {
+              const pedido = pedidos.find((p) => p.id === Number(e.target.value));
+              setPedidoSeleccionado(pedido || null);
+            }}
             disabled={loading}
           >
-            Eliminar Pedido
-          </button>
-        )}
+            <option value="">-- Selecciona un pedido --</option>
+            {pedidos.map((p) => (
+              <option key={p.id} value={p.id}>
+                Pedido #{p.id} - {p.estado}
+              </option>
+            ))}
+          </select>
+          {pedidoSeleccionado && (
+            <button
+              onClick={() => eliminarPedido(pedidoSeleccionado.id)}
+              className="btn-eliminar"
+              disabled={loading}
+            >
+              Eliminar Pedido
+            </button>
+          )}
+        </div>
       </div>
 
       {pedidoSeleccionado && (

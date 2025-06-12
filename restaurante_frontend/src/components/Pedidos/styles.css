@@ -1,92 +1,131 @@
+/* Estilos base */
 .pedidos-container {
-  max-width: 900px;
-  margin: 20px auto;
+  max-width: 1000px;
+  margin: 0 auto;
   padding: 20px;
-  background: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', Roboto, sans-serif;
 }
 
-.error {
-  color: #d32f2f;
-  background: #ffebee;
-  padding: 10px;
-  border-radius: 4px;
-  margin-bottom: 15px;
+/* Header con botón de volver */
+.header-with-back {
+  position: relative;
+  margin-bottom: 25px;
+  text-align: center;
 }
 
-button {
-  padding: 8px 16px;
-  background: #4CAF50;
+.back-button {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 8px 15px;
+  background: #edf2f7;
+  color: #2d3748;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 14px;
+  transition: all 0.3s;
+}
+
+.back-button:hover {
+  background: #e2e8f0;
+  transform: translateY(-50%) translateX(-3px);
+}
+
+/* Acciones principales */
+.pedidos-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.btn-primary {
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 500;
   cursor: pointer;
-  margin: 5px;
+  transition: all 0.3s;
+  align-self: flex-start;
 }
 
-button:disabled {
-  background: #cccccc;
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+.btn-primary:disabled {
+  background: #ccc;
+  transform: none;
+  box-shadow: none;
   cursor: not-allowed;
 }
 
-.btn-eliminar {
-  background: #f44336;
-}
-
-.btn-eliminar:hover {
-  background: #d32f2f;
-}
-
+/* Selector de pedido */
 .seleccion-pedido {
   display: flex;
   gap: 10px;
   align-items: center;
-  margin: 20px 0;
 }
 
 .seleccion-pedido select {
   flex-grow: 1;
-  padding: 8px;
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
 }
 
-.detalle-pedido {
-  margin-top: 30px;
+.btn-eliminar {
+  padding: 10px 15px;
+  background: #fff5f5;
+  color: #e53e3e;
+  border: 1px solid #fed7d7;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
 }
 
-.cabecera-detalles {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 15px;
+.btn-eliminar:hover {
+  background: #e53e3e;
+  color: white;
 }
 
-.agregar-producto {
-  display: flex;
-  gap: 10px;
+/* Mensajes de error */
+.error {
+  color: #e53e3e;
+  background: #fff5f5;
+  padding: 10px 15px;
+  border-radius: 6px;
   margin-bottom: 20px;
+  border-left: 4px solid #e53e3e;
 }
 
-.agregar-producto select {
-  flex-grow: 1;
+/* Responsive */
+@media (max-width: 768px) {
+  .header-with-back {
+    padding-top: 40px;
+  }
+  
+  .back-button {
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: max-content;
+  }
+  
+  .seleccion-pedido {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .btn-primary {
+    width: 100%;
+  }
 }
 
-.agregar-producto input {
-  width: 70px;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-}
-
-th, td {
-  padding: 12px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
-}
-
-th {
-  background-color: #f2f2f2;
-}
